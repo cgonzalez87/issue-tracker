@@ -3,7 +3,7 @@ import { z } from "zod";
 import { prisma } from "@/prisma/client";
 
 
-const createIssueSchema = z.object({ //Shape of the object in the body of request
+const createIssueSchema = z.object({ //Shape of the object my the body of request
     title: z.string().min(1).max(255),
     description: z.string().min(1),
 });
