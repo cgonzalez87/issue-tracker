@@ -12,7 +12,6 @@ interface Props {
 const IssueDetailPage = async ({ params }: Props) => {
   const issueId = parseInt(params.id);
   if (isNaN(issueId)) notFound();
-  //   if (typeof params.id !== "number") notFound(); //If I want to redirect the user before even fetching.
 
   const issue = await prisma.issue.findUnique({
     where: {
