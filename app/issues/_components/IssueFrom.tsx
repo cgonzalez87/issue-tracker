@@ -21,10 +21,6 @@ const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
 
 type IssueFormData = z.infer<typeof issueSchema>;
 
-// interface Props {
-//   issue?: Issue;
-// }
-
 const IssueForm = ({ issue }: { issue?: Issue }) => {
   const router = useRouter(); //Using the router hook in navigation
   const {
@@ -43,9 +39,12 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
       if (issue) await axios.patch("/api/issues/" + issue.id, data);
       else await axios.post("/api/issues", data);
       router.push("/issues");
-    } catch (error) {
+      router.refresh();
+    } catch (error: unknown) {
       setSubmitting(false);
-      setError("An unexpected error occurred.");
+      setError(
+        error instanceof Error ? error.message : "An unexpected error occurred."
+      );
     }
   });
 
@@ -75,7 +74,7 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
           )}
         />
         <ErrorMessage>{errors.description?.message}</ErrorMessage>
-        <Button disabled={isSubmitting}>
+        <Button style={{ cursor: "pointer" }} disabled={isSubmitting}>
           {issue ? "Update issue" : "Submit new issue"}{" "}
           {isSubmitting && <Spinner />}
         </Button>
