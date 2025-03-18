@@ -9,18 +9,19 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model Issue {
   id               Int      @id @default(autoincrement())
-  title            String   @db.VarChar(255)
-  description      String   @db.Text
+  title            String
+  description      String
   status           Status   @default(OPEN)
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
-  assignedToUserId String?  @db.VarChar(255)
+  assignedToUserId String?
   assignedToUser   User?    @relation(fields: [assignedToUserId], references: [id])
 }
 
@@ -36,12 +37,12 @@ model Account {
   type              String
   provider          String
   providerAccountId String  @map("provider_account_id")
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?
   session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
