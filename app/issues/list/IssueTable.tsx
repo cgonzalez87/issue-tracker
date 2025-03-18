@@ -5,6 +5,7 @@ import { Table } from "@radix-ui/themes";
 import Link from "next/link";
 import NextLink from "next/link";
 import React from "react";
+import AssignedUserFetcher from "./AssignedUserFetcher";
 
 export interface IssueQuery {
   status: Status;
@@ -56,6 +57,9 @@ const IssueTable = ({ searchParams, issues }: Props) => {
             <Table.Cell className="hidden md:table-cell">
               {issue.createdAt.toDateString()}
             </Table.Cell>
+            <Table.Cell className="hidden md:table-cell">
+              <AssignedUserFetcher assignedToUserId={issue.assignedToUserId} />
+            </Table.Cell>
           </Table.Row>
         ))}
       </Table.Body>
@@ -65,12 +69,13 @@ const IssueTable = ({ searchParams, issues }: Props) => {
 
 const columns: {
   label: string;
-  value: keyof Issue;
+  value?: keyof Issue; // `value` is optional since "Assigned User" isn't directly in Issue
   className?: string;
 }[] = [
   { label: "Issue", value: "title" },
   { label: "Status", value: "status", className: "hidden md:table-cell" },
   { label: "Created", value: "createdAt", className: "hidden md:table-cell" },
+  { label: "Assigned User", className: "hidden md:table-cell" }, // Updated column for user name
 ];
 
 export const columnNames = columns.map((column) => column.value);
