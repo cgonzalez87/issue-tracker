@@ -6,6 +6,7 @@ import Link from "next/link";
 import NextLink from "next/link";
 import React from "react";
 import AssignedUserFetcher from "./AssignedUserFetcher";
+import AssignedUserDropdown from "./AssignedUserDropdown";
 
 export interface IssueQuery {
   status: Status;
@@ -58,7 +59,10 @@ const IssueTable = ({ searchParams, issues }: Props) => {
               {issue.createdAt.toDateString()}
             </Table.Cell>
             <Table.Cell className="hidden md:table-cell">
-              <AssignedUserFetcher assignedToUserId={issue.assignedToUserId} />
+              <AssignedUserDropdown
+                issueId={issue.id}
+                assignedToUserId={issue.assignedToUserId}
+              />
             </Table.Cell>
           </Table.Row>
         ))}
