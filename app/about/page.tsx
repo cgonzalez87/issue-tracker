@@ -52,7 +52,7 @@ const TechProfile = ({ imageUrl }: { imageUrl: string }) => {
           {/* Profile Image */}
           <div className="w-40 h-40 rounded-full overflow-hidden border-4 border-white shadow-lg">
             <img
-              src="/IMG_4460.JPG"
+              src={imageUrl}
               alt="Carlos Gonzalez"
               className="w-full h-full object-cover"
             />
@@ -62,7 +62,7 @@ const TechProfile = ({ imageUrl }: { imageUrl: string }) => {
           <h1 className="text-white text-3xl font-bold mt-4">
             Carlos Gonzalez
           </h1>
-          <p className="text-gray-300 mt-2">The super awesome Developer 🚀</p>
+          <p className="text-gray-300 mt-2">I am a Software Engineer</p>
 
           {/* Animated Description */}
           <motion.p
@@ -79,4 +79,8 @@ const TechProfile = ({ imageUrl }: { imageUrl: string }) => {
   );
 };
 
-export default TechProfile;
+const AboutPage = () => {
+  return <TechProfile imageUrl="/IMG_4460.JPG" />;
+};
+
+export default AboutPage;
