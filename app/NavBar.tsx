@@ -14,6 +14,7 @@ import {
   Flex,
   Text,
 } from "@radix-ui/themes";
+import MenuPanel from "./MenuPanel";
 
 const NavBar = () => {
   return (
@@ -21,11 +22,11 @@ const NavBar = () => {
       <Container>
         <Flex justify="between">
           <Flex align="center" gap="3">
-            <Link href="/">
-              {/* <FaTasks /> */}
+            <MenuPanel />
+            {/* <Link href="/">
               <img src="/favicon.ico" alt="Home" className="w-6 h-6" />
-            </Link>
-            <NavLinks />
+            </Link> */}
+            {/* <NavLinks /> */}
           </Flex>
           <AuthStatus />
         </Flex>
@@ -34,32 +35,32 @@ const NavBar = () => {
   );
 };
 
-const NavLinks = () => {
-  const currentPath = usePathname(); //we can only use browser APIs in client components
-  const links = [
-    { label: "Dashboard", href: "/dashboard" },
-    { label: "Issues", href: "/issues/list" },
-    // { label: "About", href: "/about" },
-  ];
+// const NavLinks = () => {
+//   const currentPath = usePathname(); //we can only use browser APIs in client components
+//   const links = [
+//     { label: "Dashboard", href: "/dashboard" },
+//     { label: "Issues", href: "/issues/list" },
+//     { label: "About", href: "/about" },
+//   ];
 
-  return (
-    <ul className="flex space-x-6">
-      {links.map((link) => (
-        <li key={link.href}>
-          <Link
-            className={classNames({
-              "nav-link": true,
-              "!text-zinc-900": link.href === currentPath,
-            })}
-            href={link.href}
-          >
-            {link.label}
-          </Link>
-        </li>
-      ))}
-    </ul>
-  );
-};
+//   return (
+//     <ul className="flex space-x-6">
+//       {links.map((link) => (
+//         <li key={link.href}>
+//           <Link
+//             className={classNames({
+//               "nav-link": true,
+//               "!text-zinc-900": link.href === currentPath,
+//             })}
+//             href={link.href}
+//           >
+//             {link.label}
+//           </Link>
+//         </li>
+//       ))}
+//     </ul>
+//   );
+// };
 
 const AuthStatus = () => {
   const { status, data: session } = useSession();
