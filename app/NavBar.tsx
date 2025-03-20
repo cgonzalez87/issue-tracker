@@ -3,7 +3,7 @@ import { Skeleton } from "@/app/components";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
-import { AiFillBug } from "react-icons/ai";
+import { FaTasks } from "react-icons/fa";
 import { useSession } from "next-auth/react";
 import classNames from "classnames"; //this is a function that we call and give it an obj
 import {
@@ -22,7 +22,7 @@ const NavBar = () => {
         <Flex justify="between">
           <Flex align="center" gap="3">
             <Link href="/">
-              <AiFillBug />
+              <FaTasks />
             </Link>
             <NavLinks />
           </Flex>
