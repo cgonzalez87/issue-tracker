@@ -19,3 +19,19 @@ export async function POST(request: NextRequest) {
 
   return NextResponse.json(newIssue, { status: 201 });
 }
+
+export async function GET(request: NextRequest) {
+  const { searchParams } = new URL(request.url);
+  const isPaginationEnabled = searchParams.get("pagination") === "true";
+  const page = parseInt(searchParams.get("page") || "1", 10);
+  const pageSize = 10;
+
+  const issues = await prisma.issue.findMany({
+    orderBy: { createdAt: "desc" },
+    ...(isPaginationEnabled
+      ? { skip: (page - 1) * pageSize, take: pageSize } // ✅ Apply pagination if enabled
+      : {}), // ✅ Fetch all issues if disabled
+  });
+
+  return NextResponse.json(issues);
+}

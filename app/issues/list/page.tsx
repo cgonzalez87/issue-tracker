@@ -33,14 +33,14 @@ const IssuesPage = async ({ searchParams }: Props) => {
 
   const where = status ? { status } : {}; // Ensure `undefined` is not passed
 
-  const page = parseInt(searchParams.page) || 1;
-  const pageSize = 10;
+  // const page = parseInt(searchParams.page) || 1;
+  // const pageSize = 10;
 
   const issues = await prisma.issue.findMany({
     where,
     orderBy,
-    skip: (page - 1) * pageSize,
-    take: pageSize,
+    // skip: (page - 1) * pageSize,
+    // take: pageSize,
   });
 
   const issueCount = await prisma.issue.count({ where });
@@ -49,11 +49,11 @@ const IssuesPage = async ({ searchParams }: Props) => {
     <Flex direction={"column"} gap="3">
       <IssueActions />
       <IssueTable searchParams={searchParams} issues={issues} />
-      <Pagination
+      {/* <Pagination
         pageSize={pageSize}
         currentPage={page}
         itemCount={issueCount}
-      />
+      /> */}
     </Flex>
   );
 };

@@ -8,7 +8,7 @@ interface Props {
 }
 
 const fetchUsers = async () => {
-  const res = await fetch("/api/issues/assigned-users");
+  const res = await fetch("/api/users");
   if (!res.ok) throw new Error("Failed to fetch users");
   return res.json();
 };
@@ -16,6 +16,7 @@ const fetchUsers = async () => {
 const AssignedUserDropdown = ({ issueId, assignedToUserId }: Props) => {
   const queryClient = useQueryClient();
 
+  // Fetch users using React Query
   const {
     data: users = [],
     error,
@@ -23,7 +24,7 @@ const AssignedUserDropdown = ({ issueId, assignedToUserId }: Props) => {
   } = useQuery({
     queryKey: ["users"],
     queryFn: fetchUsers,
-    staleTime: 1000 * 60 * 5, // Cache users for 5 minutes
+    staleTime: 1000 * 30, // 🔄 Fetch fresh users every 30 seconds
   });
 
   // Mutation for assigning a user
@@ -38,7 +39,8 @@ const AssignedUserDropdown = ({ issueId, assignedToUserId }: Props) => {
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["issues"] }); // Refetching issues after assignment
+      queryClient.invalidateQueries({ queryKey: ["issues"] }); // 🔄 Refetch issues
+      queryClient.invalidateQueries({ queryKey: ["users"] }); // 🔄 Refetch users so dropdown updates
     },
   });
 
