@@ -22,7 +22,8 @@ const NavBar = () => {
         <Flex justify="between">
           <Flex align="center" gap="3">
             <Link href="/">
-              <FaTasks />
+              {/* <FaTasks /> */}
+              <img src="/favicon.ico" alt="Home" className="w-6 h-6" />
             </Link>
             <NavLinks />
           </Flex>
@@ -36,7 +37,7 @@ const NavBar = () => {
 const NavLinks = () => {
   const currentPath = usePathname(); //we can only use browser APIs in client components
   const links = [
-    { label: "Dashboard", href: "/" },
+    { label: "Dashboard", href: "/dashboard" },
     { label: "Issues", href: "/issues/list" },
     // { label: "About", href: "/about" },
   ];
