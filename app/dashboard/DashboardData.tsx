@@ -2,9 +2,9 @@
 "use client";
 
 import React from "react";
-import IssueSummary from "../IssueSummary";
-import IssueChart from "../IssueChart";
-import LatestIssues from "../LatestIssues";
+import IssueSummary from "./IssueSummary";
+import IssueChart from "./IssueChart";
+import LatestIssues from "./LatestIssues";
 import { Grid, Flex } from "@radix-ui/themes";
 
 const DashboardData = () => {

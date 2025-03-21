@@ -6,6 +6,7 @@ import { IssueStatusBadge } from "@/app/components";
 import { Card, Flex, Heading, Text } from "@radix-ui/themes";
 import ReactMarkdown from "react-markdown";
 import React from "react";
+import IssueDetailsLoading from "./IssueDetailsLoading";
 
 interface IssueDetailsProps {
   issueId: number;
@@ -25,7 +26,7 @@ const IssueDetails = ({ issueId }: IssueDetailsProps) => {
     refetchOnWindowFocus: false, // optional: adjust as needed
   });
 
-  if (isLoading) return <p>Loading issue...</p>;
+  if (isLoading) return <IssueDetailsLoading />;
   if (error || !issue) return <p>Error loading issue</p>;
 
   return (

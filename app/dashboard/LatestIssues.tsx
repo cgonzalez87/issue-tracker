@@ -1,9 +1,6 @@
 "use client";
 
 // Import necessary libraries and components
-import React from "react";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import {
   Avatar,
   Card,
@@ -12,8 +9,11 @@ import {
   Table,
   TableBody,
 } from "@radix-ui/themes";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 import Link from "next/link";
-import { IssueStatusBadge } from "./components";
+import { IssueStatusBadge } from "../components";
+import LatestIssuesLoading from "./LatestIssuesLoading";
 
 // Define a minimal Issue type (adjust as needed)
 interface Issue {
@@ -47,7 +47,7 @@ const LatestIssues = () => {
   });
 
   // Display a loading message while data is being fetched
-  if (isLoading) return <p>Loading issues...</p>;
+  if (isLoading) return <LatestIssuesLoading />;
   // Display an error message if the fetch fails
   if (error || !issues) return <p>Error loading issues</p>;
 

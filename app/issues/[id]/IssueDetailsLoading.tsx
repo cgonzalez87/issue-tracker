@@ -1,7 +1,7 @@
 import { Skeleton } from "@/app/components";
 import { Box, Card, Flex } from "@radix-ui/themes";
 
-const LoadingIssueDetailPage = () => {
+const IssueDetailsLoading = () => {
   return (
     <Box className="max-w-xl">
       <Skeleton />
@@ -16,4 +16,4 @@ const LoadingIssueDetailPage = () => {
   );
 };
 
-export default LoadingIssueDetailPage;
+export default IssueDetailsLoading;

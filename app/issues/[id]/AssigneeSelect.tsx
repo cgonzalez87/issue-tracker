@@ -6,7 +6,7 @@ import { Select } from "@radix-ui/themes";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import React from "react";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { useIssueUpdateStore } from "@/app/stores/useIssueUpdateStore";
 
 const AssigneeSelect = ({ issue }: { issue: Issue }) => {
@@ -62,7 +62,6 @@ const AssigneeSelect = ({ issue }: { issue: Issue }) => {
           </Select.Group>
         </Select.Content>
       </Select.Root>
-      <Toaster />
     </>
   );
 };

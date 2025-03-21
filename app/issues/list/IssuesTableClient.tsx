@@ -8,6 +8,7 @@ import IssueTable, { IssueQuery } from "./IssueTable";
 import { Flex } from "@radix-ui/themes";
 import { useSearchParams } from "next/navigation";
 import { useIssueUpdateStore } from "@/app/stores/useIssueUpdateStore"; // Adjust path
+import LoadingIssuesPage from "./LoadingIssuesPage";
 
 // Async function to fetch issues from your API endpoint using provided query parameters
 const fetchIssues = async (searchParams: IssueQuery): Promise<Issue[]> => {
@@ -54,7 +55,7 @@ const IssuesTableClient = () => {
     queryClient.invalidateQueries({ queryKey: ["issues"], exact: false });
   }, [queryClient]);
 
-  if (isLoading) return <p>Loading issues...</p>;
+  if (isLoading) return <LoadingIssuesPage />;
   if (error || !issues) return <p>Error loading issues</p>;
 
   return (
