@@ -24,7 +24,8 @@ const DashboardData = () => {
       return res.data;
     },
     // Optionally, poll for fresh data every 5 seconds:
-    refetchInterval: 5000,
+    refetchOnMount: true, // ✅ ensures fresh data every time the component remounts
+    refetchOnWindowFocus: true, // optional: refreshes when user focuses tab
   });
 
   if (isLoading) return <p>Loading dashboard data...</p>;
