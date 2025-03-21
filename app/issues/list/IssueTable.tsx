@@ -5,8 +5,7 @@ import { Table } from "@radix-ui/themes";
 import Link from "next/link";
 import NextLink from "next/link";
 import React from "react";
-import AssignedUserFetcher from "./AssignedUserFetcher";
-import AssignedUserDropdown from "./AssignedUserDropdown";
+import AssigneeSelect from "../[id]/AssigneeSelect";
 
 export interface IssueQuery {
   status: Status;
@@ -25,8 +24,9 @@ const IssueTable = ({ searchParams, issues }: Props) => {
       <Table.Header>
         <Table.Row>
           {columns.map((column) => (
+            // Use column.value if available, else fallback to column.label to ensure a unique key
             <Table.ColumnHeaderCell
-              key={column.value}
+              key={column.value || column.label}
               className={column.className}
             >
               <NextLink
@@ -56,13 +56,10 @@ const IssueTable = ({ searchParams, issues }: Props) => {
               <IssueStatusBadge status={issue.status} />
             </Table.Cell>
             <Table.Cell className="hidden md:table-cell">
-              {issue.createdAt.toDateString()}
+              {new Date(issue.createdAt).toDateString()}
             </Table.Cell>
             <Table.Cell className="hidden md:table-cell">
-              <AssignedUserDropdown
-                issueId={issue.id}
-                assignedToUserId={issue.assignedToUserId}
-              />
+              <AssigneeSelect issue={issue} />
             </Table.Cell>
           </Table.Row>
         ))}
@@ -79,7 +76,12 @@ const columns: {
   { label: "Issue", value: "title" },
   { label: "Status", value: "status", className: "hidden md:table-cell" },
   { label: "Created", value: "createdAt", className: "hidden md:table-cell" },
-  { label: "Assigned User", className: "hidden md:table-cell" }, // Updated column for user name
+  // Provide a key fallback by including a value here (or use label as fallback)
+  {
+    label: "Assigned User",
+    value: "assignedToUserId",
+    className: "hidden md:table-cell",
+  },
 ];
 
 export const columnNames = columns.map((column) => column.value);

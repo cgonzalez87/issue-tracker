@@ -3,49 +3,58 @@
 import { Skeleton } from "@/app/components";
 import { Issue, User } from "@prisma/client";
 import { Select } from "@radix-ui/themes";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import delay from "delay";
+import React from "react";
 import toast, { Toaster } from "react-hot-toast";
+import { useIssueUpdateStore } from "@/app/stores/useIssueUpdateStore";
 
 const AssigneeSelect = ({ issue }: { issue: Issue }) => {
   const { data: users, error, isLoading } = useUsers();
+  const queryClient = useQueryClient();
+
+  const updateAssignee = useMutation({
+    mutationFn: async (userId: string) => {
+      const res = await axios.patch("/api/issues/" + issue.id, {
+        assignedToUserId: userId || null,
+      });
+      return res.data;
+    },
+    onSuccess: (_, userId) => {
+      // Look up the user name from the users list
+      const assignedUser = users?.find((u: User) => u.id === userId);
+      if (userId) {
+        toast.success(
+          `Assignee updated successfully! Now assigned to ${
+            assignedUser?.name || "Unknown"
+          }`
+        );
+      } else {
+        toast.success("Assignee updated successfully! Now unassigned.");
+      }
+      useIssueUpdateStore.getState().refresh(); // 👈 Trigger refetch
+      queryClient.invalidateQueries({ queryKey: ["issues"], exact: false });
+    },
+    onError: () => {
+      toast.error("Failed to update assignee");
+    },
+  });
 
   if (isLoading) return <Skeleton />;
   if (error) return null;
-
-  // const [users, setUser] = useState<User[]>([]);
-  // useEffect(() => {
-  //   const fetchUsers = async () => {
-  //     const { data: Users } = await axios.get<User[]>("/api/users");
-  //     setUser(Users);
-  //   };
-  //   fetchUsers();
-  // }, []);
-
-  const assigneIssue = (userId: string) => {
-    axios
-      .patch("/api/issues/" + issue.id, {
-        assignedToUserId: userId || null,
-      })
-      .catch(() => {
-        toast.error("Failed to update assignee");
-      });
-  };
 
   return (
     <>
       <Select.Root
         defaultValue={issue.assignedToUserId || ""}
-        onValueChange={assigneIssue}
+        onValueChange={(userId) => updateAssignee.mutate(userId)}
       >
         <Select.Trigger placeholder="Assign..." />
         <Select.Content>
           <Select.Group>
             <Select.Label>Suggestions</Select.Label>
             <Select.Item value="">Unassigned</Select.Item>
-            {users?.map((user) => (
+            {users?.map((user: User) => (
               <Select.Item key={user.id} value={user.id}>
                 {user.name}
               </Select.Item>

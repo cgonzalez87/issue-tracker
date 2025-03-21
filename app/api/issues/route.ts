@@ -22,15 +22,31 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
+  
+  // 1) Check if "status" is present
+  const statusParam = searchParams.get("status");
+
+  // 2) Build a `where` object for the Prisma query
+  let where: any = {};
+  if (statusParam && ["OPEN", "IN_PROGRESS", "CLOSED"].includes(statusParam)) {
+    where.status = statusParam;
+  }
+
+  // 3) Optional: check if pagination is used
   const isPaginationEnabled = searchParams.get("pagination") === "true";
   const page = parseInt(searchParams.get("page") || "1", 10);
   const pageSize = 10;
 
+  // 4) Now fetch from Prisma, applying the `where` filter
   const issues = await prisma.issue.findMany({
+    where,
     orderBy: { createdAt: "desc" },
+    include: {
+      assignedToUser: true, // this line includes the assigned user data for avatar
+    },
     ...(isPaginationEnabled
-      ? { skip: (page - 1) * pageSize, take: pageSize } // ✅ Apply pagination if enabled
-      : {}), // ✅ Fetch all issues if disabled
+      ? { skip: (page - 1) * pageSize, take: pageSize }
+      : {}),
   });
 
   return NextResponse.json(issues);
