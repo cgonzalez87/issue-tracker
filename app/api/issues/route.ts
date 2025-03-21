@@ -49,5 +49,26 @@ export async function GET(request: NextRequest) {
       : {}),
   });
 
+  // 5) Check if counts should be included
+  const includeCounts = searchParams.get("includeCounts") === "true";
+
+  if (includeCounts) {
+    // Count issues grouped by status
+    const issueCounts = await prisma.issue.groupBy({
+      by: ['status'],
+      _count: {
+        status: true,
+      },
+    });
+
+    const counts = {
+      open: issueCounts.find((group) => group.status === 'OPEN')?._count.status || 0,
+      inProgress: issueCounts.find((group) => group.status === 'IN_PROGRESS')?._count.status || 0,
+      closed: issueCounts.find((group) => group.status === 'CLOSED')?._count.status || 0,
+    };
+
+    return NextResponse.json({ issues, counts });
+  }
+
   return NextResponse.json(issues);
 }
