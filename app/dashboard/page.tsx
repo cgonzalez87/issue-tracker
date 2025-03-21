@@ -1,9 +1,8 @@
-// app/dashboard/page.tsx
-import dynamic from "next/dynamic";
+import dynamicImport from "next/dynamic";
 import { Metadata } from "next";
 
 // ✅ Dynamically import the client-only DashboardData
-const DashboardData = dynamic(() => import("./DashboardData"), {
+const DashboardData = dynamicImport(() => import("./DashboardData"), {
   ssr: false, // ❗ ensure it’s rendered only on the client
 });
 
@@ -11,7 +10,8 @@ export default function Home() {
   return <DashboardData />;
 }
 
-export const forceDynamic = "force-dynamic";
+// ✅ Correct Next.js export without conflict
+export const dynamic = "force-dynamic"; // Forces dynamic rendering
 
 export const metadata: Metadata = {
   title: "Task Tracker Dashboard",
