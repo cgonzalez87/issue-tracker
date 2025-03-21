@@ -6,17 +6,18 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function PATCH(
   request: NextRequest, 
-  { params }: { params: { id: string }}) {
+  { params }: { params: { id: string } }
+) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({}, { status: 401 });
 
   const body = await request.json();
 
-  // If request only contains `assignedToUserId`, skip validation schema for other fields
+  // Branch for updating assignedToUserId (assignee)
   if ("assignedToUserId" in body) {
     const userExists = body.assignedToUserId
       ? await prisma.user.findUnique({ where: { id: body.assignedToUserId } })
-      : true; // `null` is allowed for unassigning
+      : true; // null is allowed for unassigning
 
     if (!userExists)
       return NextResponse.json({ error: "Invalid user" }, { status: 400 });
@@ -29,15 +30,37 @@ export async function PATCH(
     return NextResponse.json(updatedIssue);
   }
 
+  // Branch for updating status
+  if ("status" in body) {
+    const validStatuses = ["OPEN", "IN_PROGRESS", "CLOSED"];
+    if (!validStatuses.includes(body.status)) {
+      return NextResponse.json({ error: "Invalid status" }, { status: 400 });
+    }
+
+    const issue = await prisma.issue.findUnique({
+      where: { id: parseInt(params.id) },
+    });
+    if (!issue) 
+      return NextResponse.json({ error: "Invalid issue" }, { status: 404 });
+
+    const updatedIssue = await prisma.issue.update({
+      where: { id: issue.id },
+      data: { status: body.status },
+    });
+
+    return NextResponse.json(updatedIssue);
+  }
+
   // Regular issue update (title, description, etc.)
   const validation = patchIssueSchema.safeParse(body);
   if (!validation.success)
     return NextResponse.json(validation.error.format(), { status: 400 });
 
   const issue = await prisma.issue.findUnique({
-    where: { id: parseInt(params.id) },
+    where: { id: parseInt(params.id) }
   });
-  if (!issue) return NextResponse.json({ error: "Invalid issue" }, { status: 404 });
+  if (!issue) 
+    return NextResponse.json({ error: "Invalid issue" }, { status: 404 });
 
   const updatedIssue = await prisma.issue.update({
     where: { id: issue.id },
@@ -53,20 +76,20 @@ export async function PATCH(
 
 export async function DELETE(
   request: NextRequest, 
-  { params }: { params: { id: string }}) {
-    
-    const session = await getServerSession(authOptions);
-    if (!session) return NextResponse.json({}, { status: 401 });
+  { params }: { params: { id: string } }
+) {
+  const session = await getServerSession(authOptions);
+  if (!session) return NextResponse.json({}, { status: 401 });
 
-    const issue = await prisma.issue.findUnique({
-      where: { id: parseInt(params.id) } 
-    });
+  const issue = await prisma.issue.findUnique({
+    where: { id: parseInt(params.id) } 
+  });
 
-    if (!issue) return NextResponse.json({ error: 'Invalid issue' }, { status: 404 });
+  if (!issue) return NextResponse.json({ error: 'Invalid issue' }, { status: 404 });
 
-    await prisma.issue.delete({
-      where: { id: issue.id }
-    });
+  await prisma.issue.delete({
+    where: { id: issue.id }
+  });
 
-    return NextResponse.json({ message: 'Issue deleted' });
+  return NextResponse.json({ message: 'Issue deleted' });
 }

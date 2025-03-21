@@ -8,7 +8,6 @@
     "start": "next start",
     "lint": "next lint",
     "postbuild": "npx sentry-cli sourcemaps upload --release=1.0.0 --dist=$(date +%s) .next"
-
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.1",
@@ -44,7 +43,8 @@
     "recharts": "^2.8.0",
     "tailwindcss": "^3.4.17",
     "typescript": "5.2.2",
-    "zod": "^3.22.2"
+    "zod": "^3.22.2",
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.10"
