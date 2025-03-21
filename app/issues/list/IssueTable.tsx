@@ -49,11 +49,11 @@ const IssueTable = ({ searchParams, issues }: Props) => {
             <Table.Cell>
               <Link href={`/issues/${issue.id}`}>{issue.title}</Link>
               <div className="block md:hidden">
-                <IssueStatusBadge issueId={issue.id} />
+                <IssueStatusBadge status={issue.status} />
               </div>
             </Table.Cell>
             <Table.Cell className="hidden md:table-cell">
-              <IssueStatusBadge issueId={issue.id} />
+              <IssueStatusBadge status={issue.status} />
             </Table.Cell>
             <Table.Cell className="hidden md:table-cell">
               {issue.createdAt.toDateString()}
@@ -79,7 +79,7 @@ const columns: {
   { label: "Issue", value: "title" },
   { label: "Status", value: "status", className: "hidden md:table-cell" },
   { label: "Created", value: "createdAt", className: "hidden md:table-cell" },
-  { label: "Assigned User", className: "hidden md:table-cell" },
+  { label: "Assigned User", className: "hidden md:table-cell" }, // Updated column for user name
 ];
 
 export const columnNames = columns.map((column) => column.value);

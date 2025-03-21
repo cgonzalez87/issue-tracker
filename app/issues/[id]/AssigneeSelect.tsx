@@ -15,6 +15,15 @@ const AssigneeSelect = ({ issue }: { issue: Issue }) => {
   if (isLoading) return <Skeleton />;
   if (error) return null;
 
+  // const [users, setUser] = useState<User[]>([]);
+  // useEffect(() => {
+  //   const fetchUsers = async () => {
+  //     const { data: Users } = await axios.get<User[]>("/api/users");
+  //     setUser(Users);
+  //   };
+  //   fetchUsers();
+  // }, []);
+
   const assigneIssue = (userId: string) => {
     axios
       .patch("/api/issues/" + issue.id, {
