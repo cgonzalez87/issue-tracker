@@ -37,7 +37,10 @@ export async function GET(request: NextRequest) {
   const page = parseInt(searchParams.get("page") || "1", 10);
   const pageSize = 10;
 
-  // 4) Now fetch from Prisma, applying the `where` filter
+  // 4) Extract the "take" parameter
+  const take = parseInt(searchParams.get("take") || "10", 10);
+
+  // 5) Now fetch from Prisma, applying the `where` filter and `take` parameter
   const issues = await prisma.issue.findMany({
     where,
     orderBy: { createdAt: "desc" },
@@ -46,10 +49,10 @@ export async function GET(request: NextRequest) {
     },
     ...(isPaginationEnabled
       ? { skip: (page - 1) * pageSize, take: pageSize }
-      : {}),
+      : { take }),
   });
 
-  // 5) Check if counts should be included
+  // 6) Check if counts should be included
   const includeCounts = searchParams.get("includeCounts") === "true";
 
   if (includeCounts) {

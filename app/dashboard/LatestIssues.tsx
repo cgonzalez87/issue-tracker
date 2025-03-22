@@ -28,7 +28,7 @@ interface Issue {
 
 // Function to fetch the latest 5 issues from your API endpoint
 const fetchLatestIssues = async (): Promise<Issue[]> => {
-  // You can modify the query parameter as needed; here we use "take=5" for 5 issues.
+  // Use the "take=5" query parameter to limit the number of issues returned
   const res = await axios.get<Issue[]>("/api/issues?take=5");
   return res.data;
 };
