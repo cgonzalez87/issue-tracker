@@ -24,7 +24,7 @@ const MenuPanel = () => {
   const links = [
     { label: "Dashboard", href: "/dashboard" },
     { label: "Tasks", href: "/issues/list" },
-    // { label: "About", href: "/about" },
+    { label: "Calendar", href: "/calendar" },
   ];
 
   return (
