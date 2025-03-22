@@ -1,11 +1,5 @@
 "use client";
 import { Skeleton } from "@/app/components";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import React from "react";
-import { FaTasks } from "react-icons/fa";
-import { useSession } from "next-auth/react";
-import classNames from "classnames"; //this is a function that we call and give it an obj
 import {
   Avatar,
   Box,
@@ -14,6 +8,8 @@ import {
   Flex,
   Text,
 } from "@radix-ui/themes";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
 import MenuPanel from "./MenuPanel";
 
 const NavBar = () => {
@@ -34,33 +30,6 @@ const NavBar = () => {
     </nav>
   );
 };
-
-// const NavLinks = () => {
-//   const currentPath = usePathname(); //we can only use browser APIs in client components
-//   const links = [
-//     { label: "Dashboard", href: "/dashboard" },
-//     { label: "Issues", href: "/issues/list" },
-//     { label: "About", href: "/about" },
-//   ];
-
-//   return (
-//     <ul className="flex space-x-6">
-//       {links.map((link) => (
-//         <li key={link.href}>
-//           <Link
-//             className={classNames({
-//               "nav-link": true,
-//               "!text-zinc-900": link.href === currentPath,
-//             })}
-//             href={link.href}
-//           >
-//             {link.label}
-//           </Link>
-//         </li>
-//       ))}
-//     </ul>
-//   );
-// };
 
 const AuthStatus = () => {
   const { status, data: session } = useSession();
